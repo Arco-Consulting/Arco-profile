@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCO Consulting — Engenharia de Software & Arquitetura de Sistemas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!--
+  TODO ANTES DE PUBLICAR (checklist de revisão):
+  1) Substituir WHATSAPP_NUMBER abaixo (script no fim do arquivo) pelo número real da ARCO.
+  2) Substituir os depoimentos com dados reais de clientes (nome, empresa, contexto, resultado) — os
+     campos entre [colchetes] são placeholders e não podem ser publicados como estão.
+  3) Preencher os números da faixa "Autoridade" (anos de atuação, projetos entregues).
+  4) Confirmar/editar razão social, CNPJ e link do LinkedIn no rodapé.
+  5) Revisar se os casos de uso (anonimizados) refletem projetos reais autorizados pelo cliente.
+-->
+<style>
+  :root{
+    --ink:#141a20;
+    --paper:#f1efe7;
+    --paper-dim:#e7e4d9;
+    --graphite:#171e26;
+    --graphite-2:#1f2a34;
+    --line:#c9c3b2;
+    --line-dark:#3a4652;
+    --steel:#3f6d8e;
+    --steel-light:#7ea6bf;
+    --signal:#b9862f;
+    --ink-soft:#4a5359;
+    --paper-soft:#c9d2d6;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans', sans-serif; font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important; scroll-behavior:auto !important;} }
+
+  /* ---------- Header ---------- */
+  header{position:sticky; top:0; z-index:50; background:rgba(241,239,231,0.94); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:18px 0;}
+  .logo{font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:15px; letter-spacing:0.02em; display:flex; align-items:center; gap:10px;}
+  .logo .mark{width:20px; height:20px; border:1.5px solid var(--ink); position:relative; flex:none;}
+  .logo .mark::before{content:""; position:absolute; inset:4px; border:1.5px solid var(--steel);}
+  .nav-links{display:flex; gap:26px; font-size:14px;}
+  .nav-links a{text-decoration:none; color:var(--ink-soft); border-bottom:1px solid transparent; padding-bottom:2px;}
+  .nav-links a:hover{color:var(--ink); border-color:var(--steel);}
+  .nav-right{display:flex; align-items:center; gap:14px;}
+  .nav-cta{font-size:13px; font-family:'IBM Plex Mono', monospace; border:1px solid var(--ink); padding:9px 16px; text-decoration:none; color:var(--ink); white-space:nowrap;}
+  .nav-cta:hover{background:var(--ink); color:var(--paper);}
+  @media (max-width:860px){ .nav-links{display:none;} }
+  .nav-toggle{display:none; background:none; border:1px solid var(--ink); padding:9px 10px; cursor:pointer;}
+  .nav-toggle span{display:block; width:18px; height:2px; background:var(--ink); margin:3px 0;}
+  @media (max-width:860px){ .nav-toggle{display:block;} }
+
+  .mobile-menu{position:fixed; inset:0; background:var(--graphite); color:var(--paper); z-index:200; display:flex; flex-direction:column; padding:24px; transform:translateY(-100%); transition:transform .25s ease; visibility:hidden;}
+  .mobile-menu.open{transform:translateY(0); visibility:visible;}
+  .mm-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;}
+  .mobile-menu .close-btn{background:none; border:1px solid var(--paper-soft); color:var(--paper); font-size:15px; padding:8px 12px; cursor:pointer; font-family:'IBM Plex Mono',monospace;}
+  .mobile-menu nav{display:flex; flex-direction:column;}
+  .mobile-menu a{color:var(--paper); text-decoration:none; font-size:20px; padding:16px 0; border-bottom:1px solid var(--line-dark);}
+  .mobile-menu .mm-cta{margin-top:26px; text-align:center; background:var(--steel); border:1px solid var(--steel); padding:15px; font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- Hero ---------- */
+  .hero{background:var(--graphite); color:var(--paper); position:relative; overflow:hidden; border-bottom:1px solid var(--line-dark);}
+  .hero-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:start; padding:88px 0 72px;}
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr; padding:56px 0 40px;} }
+  .kicker{font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:0.06em; color:var(--steel-light); display:flex; align-items:center; gap:10px; margin-bottom:22px;}
+  .kicker::before{content:""; width:26px; height:1px; background:var(--steel-light);}
+  h1{font-size:clamp(32px, 4.2vw, 50px); line-height:1.12; font-weight:600; letter-spacing:-0.01em; margin:0 0 20px; max-width:17ch;}
+  .hero p.sub{font-size:17px; color:var(--paper-soft); max-width:48ch; margin:0 0 8px;}
+  .qualify{display:flex; flex-direction:column; gap:12px; margin:26px 0 32px; padding:20px 22px; border:1px solid var(--line-dark); background:rgba(255,255,255,0.03); max-width:52ch;}
+  .qualify div{display:flex; gap:12px; font-size:14px; color:var(--paper-soft); align-items:baseline;}
+  .qualify strong{color:var(--steel-light); font-weight:600; min-width:150px; flex:none; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.03em;}
+  .cta-row{display:flex; flex-direction:column; align-items:flex-start; gap:12px;}
+  .btn-primary{font-family:'IBM Plex Mono', monospace; font-size:14px; background:var(--steel); color:#f5f7f8; border:1px solid var(--steel); padding:15px 26px; text-decoration:none; display:inline-block; transition:background .15s ease, border-color .15s ease;}
+  .btn-primary:hover{background:#345d7a; border-color:#345d7a;}
+  .microcopy{font-size:13px; color:#8c98a1;}
+  .schematic{position:relative; max-width:380px; margin:12px auto 0;}
+  @media (max-width:900px){ .schematic{max-width:300px;} }
+  .schematic svg{width:100%; height:auto; display:block;}
+
+  /* ---------- Section shells ---------- */
+  section{padding:84px 0;}
+  @media (max-width:640px){ section{padding:52px 0;} }
+  .section-head{max-width:640px; margin-bottom:48px;}
+  .eyebrow{font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.05em; color:var(--steel); margin-bottom:12px;}
+  h2{font-size:clamp(25px, 3vw, 34px); line-height:1.2; font-weight:600; margin:0 0 14px; letter-spacing:-0.01em;}
+  .section-head p{color:var(--ink-soft); font-size:16px; max-width:52ch; margin:0;}
+
+  /* ---------- About ---------- */
+  .about{border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--paper-dim);}
+  .about-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px; align-items:start;}
+  @media (max-width:860px){ .about-grid{grid-template-columns:1fr; gap:32px;} }
+  .about-grid p{font-size:16.5px; margin:0 0 18px; color:var(--ink);}
+  .about-grid p:last-child{margin-bottom:0;}
+  .about-tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:24px;}
+  .about-tags span{font-family:'IBM Plex Mono', monospace; font-size:12px; border:1px solid var(--line); padding:6px 11px; color:var(--ink-soft);}
+
+  /* ---------- Como trabalhamos ---------- */
+  .timeline{display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid var(--line); border-left:1px solid var(--line);}
+  @media(max-width:900px){ .timeline{grid-template-columns:1fr;} }
+  .tl-step{padding:26px 22px; border-right:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .tl-num{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--steel); margin-bottom:10px;}
+  .tl-step h3{font-size:16px; margin:0 0 8px;}
+  .tl-step p{font-size:13.5px; color:var(--ink-soft); margin:0;}
+
+  /* ---------- Services ---------- */
+  .services-list{border-top:1px solid var(--line);}
+  .service-row{display:grid; grid-template-columns:110px 1fr 1fr; gap:32px; padding:38px 0; border-bottom:1px solid var(--line);}
+  @media (max-width:860px){ .service-row{grid-template-columns:1fr; gap:14px; padding:30px 0;} }
+  .service-num{font-family:'IBM Plex Mono', monospace; font-size:14px; color:var(--steel); padding-top:2px;}
+  .service-row h3{font-size:19px; margin:0 0 10px; font-weight:600;}
+  .service-row .label{font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.04em; color:var(--ink-soft); display:block; margin-bottom:6px;}
+  .service-row p{margin:0; font-size:15px; color:var(--ink-soft);}
+
+  /* ---------- Banner CTA intermediária ---------- */
+  .banner-cta{background:var(--steel); color:#fff; padding:32px 0;}
+  .banner-inner{display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;}
+  .banner-inner p{margin:0; font-size:16.5px; font-weight:500; max-width:50ch;}
+  .btn-light{font-family:'IBM Plex Mono',monospace; font-size:13.5px; background:#fff; color:var(--steel); border:1px solid #fff; padding:13px 22px; text-decoration:none; white-space:nowrap;}
+  .btn-light:hover{background:transparent; color:#fff;}
+
+  /* ---------- Diagnóstico ---------- */
+  .diag-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:32px;}
+  @media(max-width:860px){ .diag-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:520px){ .diag-grid{grid-template-columns:1fr;} }
+  .diag-card{background:var(--paper); padding:26px 22px;}
+  .diag-card .label{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel); display:block; margin-bottom:8px;}
+  .diag-card p{margin:0; font-size:14.5px; color:var(--ink);}
+
+  /* ---------- Diferenciais ---------- */
+  .diff{background:var(--graphite-2); color:var(--paper);}
+  .diff .eyebrow{color:var(--steel-light);}
+  .diff .section-head p{color:var(--paper-soft);}
+  .diff-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:1px; background:var(--line-dark); border:1px solid var(--line-dark);}
+  @media (max-width:720px){ .diff-grid{grid-template-columns:1fr;} }
+  .diff-card{background:var(--graphite-2); padding:34px 30px;}
+  .diff-icon{margin-bottom:18px;}
+  .diff-icon svg{width:34px; height:34px; display:block;}
+  .diff-card h3{font-size:17px; margin:0 0 10px; font-weight:600;}
+  .diff-card p{font-size:14.5px; color:var(--paper-soft); margin:0;}
+
+  /* ---------- Casos de uso ---------- */
+  .cases{border-top:1px solid var(--line);}
+  .cases-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line-dark); border:1px solid var(--line-dark);}
+  @media(max-width:900px){ .cases-grid{grid-template-columns:1fr;} }
+  .case-card{background:var(--graphite-2); padding:30px 26px; color:var(--paper);}
+  .case-card .label{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel-light); display:block; margin-bottom:14px;}
+  .case-row{margin-bottom:12px;}
+  .case-row span{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#8c98a1; display:block; margin-bottom:3px;}
+  .case-row p{margin:0; font-size:13.5px; color:var(--paper-soft);}
+  .case-result{border-top:1px solid var(--line-dark); margin-top:16px; padding-top:14px; font-size:13.5px; color:var(--signal); font-weight:600;}
+
+  /* ---------- Autoridade ---------- */
+  .stats{border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--paper-dim);}
+  .stats-row{display:grid; grid-template-columns:repeat(4,1fr); gap:24px; padding:36px 0;}
+  @media(max-width:720px){ .stats-row{grid-template-columns:1fr 1fr;} }
+  .stat .label{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel); margin-bottom:8px; display:block;}
+  .stat .val{font-size:15px; color:var(--ink); line-height:1.4;}
+
+  /* ---------- Depoimentos ---------- */
+  .testimonials{border-top:1px solid var(--line);}
+  .t-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  @media (max-width:900px){ .t-grid{grid-template-columns:1fr;} }
+  .t-card{background:var(--paper); padding:32px 28px; display:flex; flex-direction:column; position:relative;}
+  .t-mark{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--steel); margin-bottom:16px;}
+  .t-card blockquote{margin:0 0 18px; font-size:15.5px; line-height:1.55; flex-grow:1;}
+  .t-result{font-size:12px; font-family:'IBM Plex Mono',monospace; color:var(--signal); margin-bottom:16px;}
+  .t-card footer{font-size:13px; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:14px;}
+  .t-card footer strong{display:block; color:var(--ink); font-weight:600; margin-bottom:2px;}
+  .t-note{font-size:12px; color:#9a8f7a; margin-top:20px; font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- Final CTA ---------- */
+  .final-cta{background:var(--graphite); color:var(--paper); text-align:left; border-top:1px solid var(--line-dark);}
+  .final-inner{max-width:680px;}
+  .final-cta h2{color:var(--paper);}
+  .final-cta p{color:var(--paper-soft); font-size:16.5px; margin:0 0 34px; max-width:52ch;}
+
+  /* ---------- Footer ---------- */
+  footer.site{background:var(--ink); color:var(--paper-soft); padding:56px 0 40px; font-size:14px;}
+  .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:32px; margin-bottom:32px;}
+  @media (max-width:720px){ .foot-grid{grid-template-columns:1fr; gap:26px;} }
+  .foot-grid h4{font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.04em; color:#8c98a1; margin:0 0 12px; font-weight:500;}
+  .foot-grid p, .foot-grid a{color:var(--paper-soft); text-decoration:none; margin:0 0 6px; display:block; font-size:14px;}
+  .foot-grid a:hover{color:#fff;}
+  .foot-legal{border-top:1px solid #2a333b; padding-top:20px; margin-bottom:16px; font-size:12.5px; color:#8c98a1;}
+  .foot-bottom{font-size:12.5px; color:#697580; font-family:'IBM Plex Mono', monospace;}
+
+  /* ---------- WhatsApp floating button ---------- */
+  .wa-fab{position:fixed; right:22px; bottom:22px; z-index:100; display:flex; align-items:center; gap:10px; text-decoration:none;}
+  .wa-fab .wa-tooltip{background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono', monospace; font-size:12.5px; padding:8px 12px; white-space:nowrap; opacity:0; transform:translateX(6px); transition:opacity .15s ease, transform .15s ease; pointer-events:none;}
+  .wa-fab:hover .wa-tooltip{opacity:1; transform:translateX(0);}
+  .wa-fab .wa-circle{width:56px; height:56px; border-radius:50%; background:#2e7d5b; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,0.28); flex:none;}
+  .wa-fab svg{width:28px; height:28px;}
+  @media (max-width:640px){ .wa-fab{right:16px; bottom:16px;} .wa-fab .wa-circle{width:52px; height:52px;} .wa-fab .wa-tooltip{display:none;} }
+
+  :focus-visible{outline:2px solid var(--steel); outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo"><span class="mark" aria-hidden="true"></span>ARCO&nbsp;CONSULTING</div>
+    <nav class="nav-links" aria-label="Navegação principal">
+      <a href="#sobre">Sobre</a>
+      <a href="#como-trabalhamos">Como Trabalhamos</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#diferenciais">Diferenciais</a>
+      <a href="#depoimentos">Depoimentos</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-cta" href="#contato">DIAGNÓSTICO&nbsp;→</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+  <div class="mm-top">
+    <div class="logo"><span class="mark" aria-hidden="true"></span>ARCO</div>
+    <button class="close-btn" id="navClose" aria-label="Fechar menu">FECHAR ✕</button>
+  </div>
+  <nav>
+    <a href="#sobre">Sobre</a>
+    <a href="#como-trabalhamos">Como Trabalhamos</a>
+    <a href="#servicos">Serviços</a>
+    <a href="#diagnostico">O Diagnóstico</a>
+    <a href="#diferenciais">Diferenciais</a>
+    <a href="#casos">Casos de Uso</a>
+    <a href="#depoimentos">Depoimentos</a>
+  </nav>
+  <a class="mm-cta btn-primary" href="#contato">Agendar Diagnóstico Técnico</a>
+</div>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="kicker">ENGENHARIA DE SOFTWARE &amp; ARQUITETURA DE SISTEMAS</div>
+      <h1>Sistemas robustos para empresas em crescimento escalarem com segurança técnica e sem retrabalho.</h1>
+      <p class="sub">Desenhamos e modernizamos a infraestrutura digital da sua operação antes de escrever a primeira linha de código. Pare de pagar por horas de refação e tenha uma arquitetura feita para o crescimento sustentável.</p>
+
+      <div class="qualify">
+        <div><strong>ATENDEMOS</strong> Empresas em expansão — de médio porte a scale-ups — que dependem de sistemas internos, ERPs ou plataformas web para sustentar a operação.</div>
+        <div><strong>RESOLVEMOS</strong> Gargalos técnicos que geram retrabalho manual, decisões sem dados confiáveis e sistemas que não acompanham o volume do negócio.</div>
+        <div><strong>FAZ SENTIDO QUANDO</strong> A equipe já sente o sistema atual travando o crescimento — antes de montar um time interno do zero ou reescrever tudo às pressas.</div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn-primary" href="#contato">Agendar Diagnóstico Técnico</a>
+        <span class="microcopy">Análise preliminar sem compromisso para operações em fase de expansão.</span>
+      </div>
+    </div>
+
+    <div class="schematic" aria-hidden="true">
+      <svg viewBox="0 0 360 420" fill="none">
+        <line x1="180" y1="40" x2="180" y2="380" stroke="#3a4652" stroke-width="1.5"/>
+        <g font-family="IBM Plex Mono, monospace">
+          <circle cx="180" cy="40" r="9" fill="#171e26" stroke="#b9862f" stroke-width="1.5"/>
+          <text x="205" y="45" fill="#e8e5db" font-size="12">01 · Diagnóstico</text>
+
+          <circle cx="180" cy="125" r="9" fill="#171e26" stroke="#7ea6bf" stroke-width="1.5"/>
+          <text x="205" y="130" fill="#e8e5db" font-size="12">02 · Arquitetura</text>
+
+          <circle cx="180" cy="210" r="9" fill="#171e26" stroke="#7ea6bf" stroke-width="1.5"/>
+          <text x="205" y="215" fill="#e8e5db" font-size="12">03 · Roadmap</text>
+
+          <circle cx="180" cy="295" r="9" fill="#171e26" stroke="#7ea6bf" stroke-width="1.5"/>
+          <text x="205" y="300" fill="#e8e5db" font-size="12">04 · Implementação</text>
+
+          <circle cx="180" cy="380" r="9" fill="#171e26" stroke="#7ea6bf" stroke-width="1.5"/>
+          <text x="205" y="385" fill="#e8e5db" font-size="12">05 · Evolução</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SOBRE ================= -->
+<section class="about" id="sobre">
+  <div class="wrap about-grid">
+    <div>
+      <div class="eyebrow">SOBRE A ARCO</div>
+      <h2>Arquitetura estruturada para operações complexas</h2>
+    </div>
+    <div>
+      <p>A ARCO nasceu para romper com o modelo tradicional de terceirização de software, que foca na entrega rápida de linhas de código em vez da estabilidade do negócio. Acreditamos que a tecnologia só cumpre seu papel quando elimina gargalos operacionais e sustenta a expansão financeira de uma empresa.</p>
+      <p>Nossa atuação combina consultoria estratégica com execução ágil, garantindo uma abordagem online e focada em resultado prático. Não entregamos apenas software: entregamos clareza arquitetural, previsibilidade de custos e sistemas projetados para durar.</p>
+      <div class="about-tags">
+        <span>CONSULTORIA</span><span>ARQUITETURA</span><span>EXECUÇÃO ÁGIL</span><span>ATENDIMENTO ONLINE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COMO TRABALHAMOS ================= -->
+<section id="como-trabalhamos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">NOSSO PROCESSO</div>
+      <h2>Como trabalhamos</h2>
+      <p>Um método sequencial, sem pular etapas — cada fase gera o insumo técnico para a próxima.</p>
+    </div>
+  </div>
+  <div class="wrap" style="padding:0;">
+    <div class="timeline">
+      <div class="tl-step"><div class="tl-num">01</div><h3>Diagnóstico</h3><p>Mapeamos o ecossistema atual e identificamos os gargalos reais da operação.</p></div>
+      <div class="tl-step"><div class="tl-num">02</div><h3>Arquitetura</h3><p>Desenhamos a estrutura técnica ideal, com fluxos de dados e cenários de carga validados.</p></div>
+      <div class="tl-step"><div class="tl-num">03</div><h3>Roadmap</h3><p>Priorizamos entregas por impacto no negócio, com prazos e marcos claros.</p></div>
+      <div class="tl-step"><div class="tl-num">04</div><h3>Implementação</h3><p>Construímos e integramos o sistema com acompanhamento técnico constante.</p></div>
+      <div class="tl-step" style="border-right:1px solid var(--line);"><div class="tl-num">05</div><h3>Evolução</h3><p>Monitoramos, ajustamos e evoluímos a arquitetura conforme a operação cresce.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVIÇOS ================= -->
+<section id="servicos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">SERVIÇOS</div>
+      <h2>Soluções estratégicas em tecnologia</h2>
+      <p>Como ajudamos sua empresa a destravar o crescimento e eliminar o retrabalho.</p>
+    </div>
+
+    <div class="services-list">
+      <div class="service-row">
+        <div class="service-num">01</div>
+        <div>
+          <h3>Consultoria em Tecnologia &amp; Arquitetura</h3>
+          <span class="label">PROBLEMA</span>
+          <p>Sistemas engessados e ERPs legados que travam a expansão e geram decisões no escuro.</p>
+        </div>
+        <div>
+          <span class="label">ENTREGA</span>
+          <p>Mapeamento completo do ecossistema atual, diagnóstico de gargalos operacionais e desenho da arquitetura ideal para suportar novos volumes de vendas, reduzindo o risco de quedas e lentidão.</p>
+        </div>
+      </div>
+
+      <div class="service-row">
+        <div class="service-num">02</div>
+        <div>
+          <h3>Desenvolvimento de Software Sob Medida</h3>
+          <span class="label">PROBLEMA</span>
+          <p>Processos operacionais descentralizados em planilhas críticas e ferramentas desconectadas.</p>
+        </div>
+        <div>
+          <span class="label">ENTREGA</span>
+          <p>Construção de sistemas centrais customizados que automatizam rotinas, centralizam dados estratégicos da operação e reduzem erros manuais de digitação.</p>
+        </div>
+      </div>
+
+      <div class="service-row">
+        <div class="service-num">03</div>
+        <div>
+          <h3>Sites &amp; Aplicações Web de Alta Performance</h3>
+          <span class="label">PROBLEMA</span>
+          <p>Portais e plataformas institucionais lentos, inseguros ou incapazes de integrar com os sistemas internos da empresa.</p>
+        </div>
+        <div>
+          <span class="label">ENTREGA</span>
+          <p>Interfaces web corporativas de alta disponibilidade, desenvolvidas com foco em segurança, velocidade de carregamento e integração nativa com seus bancos de dados.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA INTERMEDIÁRIA ================= -->
+<section class="banner-cta">
+  <div class="wrap banner-inner">
+    <p>Reconhece algum desses gargalos na sua operação hoje?</p>
+    <a class="btn-light" href="#diagnostico">Entender se Faz Sentido para Minha Operação</a>
+  </div>
+</section>
+
+<!-- ================= DIAGNÓSTICO ================= -->
+<section id="diagnostico">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">O DIAGNÓSTICO TÉCNICO</div>
+      <h2>O que acontece na primeira etapa</h2>
+      <p>Antes de qualquer proposta, avaliamos tecnicamente a sua operação — sem compromisso.</p>
+    </div>
+
+    <div class="diag-grid">
+      <div class="diag-card"><span class="label">DURAÇÃO</span><p>Geralmente entre 3 e 5 dias úteis, conforme a complexidade do sistema atual.</p></div>
+      <div class="diag-card"><span class="label">FORMATO</span><p>Reuniões remotas com o time técnico e acesso à documentação existente, quando disponível.</p></div>
+      <div class="diag-card"><span class="label">O QUE VOCÊ RECEBE</span><p>Relatório com os gargalos identificados, riscos técnicos e recomendação inicial de arquitetura.</p></div>
+      <div class="diag-card"><span class="label">PRÓXIMOS PASSOS</span><p>Apresentação dos resultados e, se fizer sentido para ambos os lados, proposta de escopo e investimento.</p></div>
+    </div>
+
+    <a class="btn-primary" href="#contato">Agendar Diagnóstico Técnico</a>
+  </div>
+</section>
+
+<!-- ================= DIFERENCIAIS ================= -->
+<section class="diff" id="diferenciais">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">POR QUE A ARCO?</div>
+      <h2>Engenharia com método</h2>
+      <p>Nossa metodologia substitui o "tentativa e erro" por previsibilidade e rigor técnico.</p>
+    </div>
+
+    <div class="diff-grid">
+      <div class="diff-card">
+        <div class="diff-icon"><svg viewBox="0 0 34 34" fill="none" stroke="#7ea6bf" stroke-width="1.5"><rect x="4" y="4" width="26" height="26"/><line x1="4" y1="13" x2="30" y2="13"/><line x1="13" y1="13" x2="13" y2="30"/></svg></div>
+        <h3>Clareza arquitetural antes do código</h3>
+        <p>Não começamos a programar na escuridão. Desenhamos a estrutura do sistema, definimos fluxos de dados e validamos cenários de carga antes de qualquer entrega funcional.</p>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon"><svg viewBox="0 0 34 34" fill="none" stroke="#7ea6bf" stroke-width="1.5"><circle cx="9" cy="9" r="4"/><circle cx="25" cy="9" r="4"/><circle cx="17" cy="26" r="4"/><line x1="12" y1="11" x2="15" y2="23"/><line x1="22" y1="11" x2="19" y2="23"/></svg></div>
+        <h3>Mapeamento de processos (BPMN / UML)</h3>
+        <p>Traduzimos as regras do seu negócio para diagramas visuais e documentados. Isso garante que o software reflita com precisão a realidade operacional da sua equipe.</p>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon"><svg viewBox="0 0 34 34" fill="none" stroke="#7ea6bf" stroke-width="1.5"><rect x="5" y="22" width="24" height="6"/><rect x="5" y="14" width="24" height="6"/><rect x="5" y="6" width="24" height="6"/></svg></div>
+        <h3>Stack tecnológica estável e comprovada</h3>
+        <p>Trabalhamos com tecnologias consolidadas no mercado corporativo (Java, PostgreSQL e arquiteturas em nuvem), garantindo segurança de dados, alta disponibilidade e facilidade de manutenção a longo prazo.</p>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon"><svg viewBox="0 0 34 34" fill="none" stroke="#7ea6bf" stroke-width="1.5"><circle cx="17" cy="17" r="12"/><line x1="17" y1="17" x2="23" y2="11"/><line x1="17" y1="17" x2="17" y2="9"/></svg></div>
+        <h3>Foco na eliminação de retrabalho</h3>
+        <p>Nossas soluções são projetadas para integrar sistemas isolados e automatizar processos manuais, devolvendo horas produtivas para o seu time focar no core business.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= AUTORIDADE ================= -->
+<section class="stats">
+  <div class="wrap stats-row">
+    <div class="stat"><span class="label">ANOS DE ATUAÇÃO</span><div class="val">[a preencher pela ARCO]</div></div>
+    <div class="stat"><span class="label">SETORES ATENDIDOS</span><div class="val">Indústria, serviços e PMEs consolidadas</div></div>
+    <div class="stat"><span class="label">STACK PRINCIPAL</span><div class="val">Java, PostgreSQL, arquiteturas em nuvem</div></div>
+    <div class="stat"><span class="label">PERFIL TÉCNICO</span><div class="val">Engenheiros de software e arquitetos de sistemas</div></div>
+  </div>
+</section>
+
+<!-- ================= CASOS DE USO ================= -->
+<section class="cases" id="casos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">CASOS DE USO</div>
+      <h2>Situações reais, apresentadas de forma anonimizada</h2>
+      <p>Os projetos abaixo refletem o tipo de problema que resolvemos — os dados de identificação foram omitidos.</p>
+    </div>
+
+    <div class="cases-grid">
+      <div class="case-card">
+        <span class="label">SETOR INDUSTRIAL</span>
+        <div class="case-row"><span>DESAFIO</span><p>Falhas de sincronização entre estoque e financeiro.</p></div>
+        <div class="case-row"><span>SOLUÇÃO</span><p>Reestruturação do sistema interno de logística.</p></div>
+        <div class="case-result">RESULTADO · Redução relevante de horas de retrabalho semanais.</div>
+      </div>
+      <div class="case-card">
+        <span class="label">SETOR DE SERVIÇOS</span>
+        <div class="case-row"><span>DESAFIO</span><p>ERP legado limitando o crescimento do atendimento.</p></div>
+        <div class="case-row"><span>SOLUÇÃO</span><p>Aplicação própria desenvolvida em substituição ao ERP.</p></div>
+        <div class="case-result">RESULTADO · Aumento do volume de atendimentos sem ampliar a equipe administrativa.</div>
+      </div>
+      <div class="case-card">
+        <span class="label">PME CONSOLIDADA</span>
+        <div class="case-row"><span>DESAFIO</span><p>Falta de clareza sobre escopo e entregas técnicas.</p></div>
+        <div class="case-row"><span>SOLUÇÃO</span><p>Mapeamento completo de processos antes do desenvolvimento.</p></div>
+        <div class="case-result">RESULTADO · Previsibilidade sobre entregas e investimento.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEPOIMENTOS ================= -->
+<section class="testimonials" id="depoimentos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">PROVA SOCIAL</div>
+      <h2>O impacto da ARCO nas operações</h2>
+    </div>
+
+    <div class="t-grid">
+      <div class="t-card">
+        <div class="t-mark">DEPOIMENTO 01</div>
+        <blockquote>A ARCO mapeou e reestruturou nosso sistema interno de logística. Eliminamos completamente as falhas de sincronização entre o estoque e o financeiro que nos custavam dezenas de horas de refação por semana.</blockquote>
+        <div class="t-result">RESULTADO · Fim das falhas de sincronização estoque/financeiro</div>
+        <footer><strong>[Nome do Cliente] — Diretor de Operações</strong>[Nome da Empresa] · Setor Industrial</footer>
+      </div>
+      <div class="t-card">
+        <div class="t-mark">DEPOIMENTO 02</div>
+        <blockquote>Sair do ERP engessado para uma aplicação própria desenvolvida pela ARCO nos deu a tração que precisávamos para dobrar o volume de atendimentos sem precisar dobrar a equipe administrativa.</blockquote>
+        <div class="t-result">RESULTADO · Volume de atendimentos dobrado sem aumento de equipe</div>
+        <footer><strong>[Nome do Cliente] — CEO</strong>[Nome da Empresa] · Setor de Serviços</footer>
+      </div>
+      <div class="t-card">
+        <div class="t-mark">DEPOIMENTO 03</div>
+        <blockquote>O grande diferencial foi a clareza técnica. Antes de escreverem uma linha de código, nos apresentaram o mapeamento completo dos processos. Sabíamos exatamente o que seria entregue e o retorno que teríamos.</blockquote>
+        <div class="t-result">RESULTADO · Previsibilidade total sobre entregas e investimento</div>
+        <footer><strong>[Nome do Cliente] — CTO / Gerente de TI</strong>[Nome da Empresa] · PME Consolidada</footer>
+      </div>
+    </div>
+    <p class="t-note">⚠ Campos entre colchetes são placeholders — substitua por dados reais e autorizados antes de publicar.</p>
+  </div>
+</section>
+
+<!-- ================= CTA FINAL ================= -->
+<section class="final-cta" id="contato">
+  <div class="wrap">
+    <div class="final-inner">
+      <div class="eyebrow">PRÓXIMO PASSO</div>
+      <h2>Pronto para modernizar sua infraestrutura digital com método e segurança?</h2>
+      <p>Agende uma reunião de diagnóstico com nossos engenheiros para avaliar os gargalos do seu sistema atual e mapear o caminho ideal para a escala da sua empresa.</p>
+      <a class="btn-primary" id="ctaFinalWhats" href="#" target="_blank" rel="noopener">Agendar Diagnóstico Técnico</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>ARCO CONSULTING</h4>
+        <p>Engenharia de Software e Arquitetura de Sistemas.</p>
+        <p>Atuação nacional via modelo consultivo online.</p>
+        <a href="#" id="linkedinLink" target="_blank" rel="noopener">LinkedIn [a inserir]</a>
+      </div>
+      <div>
+        <h4>LOCALIZAÇÃO</h4>
+        <p>São Paulo — SP</p>
+        <p>Atendimento online em todo o Brasil</p>
+      </div>
+      <div>
+        <h4>CONTATO</h4>
+        <a href="mailto:contato@arcoconsulting.com.br">contato@arcoconsulting.com.br</a>
+        <a href="#contato">Fale com um consultor</a>
+      </div>
+    </div>
+    <div class="foot-legal">[Razão Social a inserir] — CNPJ [a inserir]</div>
+    <div class="foot-bottom">© <span id="year"></span> ARCO CONSULTING. TODOS OS DIREITOS RESERVADOS.</div>
+  </div>
+</footer>
+
+<!-- ================= WHATSAPP FLOATING BUTTON ================= -->
+<a class="wa-fab" id="waFab" href="#" target="_blank" rel="noopener" aria-label="Falar com um especialista no WhatsApp">
+  <span class="wa-tooltip">Falar com um Especialista</span>
+  <span class="wa-circle">
+    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.29-1.39a9.87 9.87 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2Zm5.79 14.02c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.8-.11-.42-.13-.95-.3-1.64-.6-2.88-1.24-4.76-4.13-4.9-4.32-.14-.19-1.17-1.56-1.17-2.98s.73-2.11 1-2.4c.24-.27.53-.34.71-.34.18 0 .35 0 .5.01.16.01.38-.06.6.45.24.57.81 1.98.88 2.12.07.14.12.31.02.5-.1.19-.15.31-.29.47-.15.17-.31.37-.44.5-.15.15-.3.31-.13.61.17.3.76 1.26 1.64 2.04 1.13 1 2.08 1.32 2.38 1.47.3.15.48.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.24.66-.15.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4Z"/></svg>
+  </span>
+</a>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // === ÚNICO LUGAR PARA EDITAR O NÚMERO DE WHATSAPP DA ARCO ===
+  const WHATSAPP_NUMBER = "5500000000000"; // TODO: substituir pelo número real (com DDI+DDD, só números)
+  const WHATSAPP_MESSAGE = "Olá! Gostaria de agendar um diagnóstico técnico para entender como a ARCO pode ajudar a modernizar nossos sistemas.";
+  const waUrl = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(WHATSAPP_MESSAGE);
+  document.getElementById('waFab').href = waUrl;
+  document.getElementById('ctaFinalWhats').href = waUrl;
+
+  // TODO: substituir pelo link real do LinkedIn da ARCO
+  document.getElementById('linkedinLink').href = "https://www.linkedin.com/";
+
+  // Menu mobile
+  const navToggle = document.getElementById('navToggle');
+  const navClose = document.getElementById('navClose');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  function openMenu(){
+    mobileMenu.classList.add('open');
+    navToggle.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu(){
+    mobileMenu.classList.remove('open');
+    navToggle.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  }
+  navToggle.addEventListener('click', openMenu);
+  navClose.addEventListener('click', closeMenu);
+  mobileMenu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+</script>
+
+</body>
+</html>
